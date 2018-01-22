@@ -2,52 +2,30 @@ package Evaluator;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileManager;
+import rdf_metadata.*;
 
 import java.io.InputStream;
 
 
+
 public class Evaluator {
 
-    public void Main(){
+    public static void main(String[] args){
         String goldstandardFileName = "data/restaurants/restaurant1_restaurant2_goldstandard.rdf";
-        String inputFile = "data/restaurants/restaurant1_restaurant2_withFalseSameAsLinks.tsv";
-        String resultsFileName = "data/restaurants/restaurant1_restaurant2_Results.tsv";
+        String inputFile = "data/restaurants/restaurant1_restaurant2_withFalseSameAsLinks.rdf";
+        String resultsFileName = "data/restaurants/restaurant1_restaurant2_Results.rdf";
+
+
+        RDFMetadata rm = new RDFMetadata(); EntityMap goldMap = rm.getEntityMap(goldstandardFileName);
         evaluate(goldstandardFileName, inputFile, resultsFileName);
-
     }
 
-    public Integer countCorrectLinks(Model input, Model gold){
-        StmtIterator iter = input.listStatements();
+    public static Integer countCorrectLinks(Model input, Model gold){
 
-        while (iter.hasNext()) {
-            Statement stmt = iter.nextStatement();
-            Resource subject = stmt.getSubject();
-            Property predicate = stmt.getPredicate();
-            RDFNode object = stmt.getObject();
-
-
-            if (object instanceof Resource) {
-                    if(predicate.toString().contains("entity")) {
-                        gold.
-
-                    }
-            }
-            if (map.inMap(subject.toString())){
-                EntityRdf entity = map.getRdf(subject.toString());
-
-                if (object.toString().equals("="))
-                    entity.predicate = "=";
-            }
-            else {
-                EntityRdf entity = new EntityRdf();
-                entity.subject = subject.toString();
-                map.addToMap(subject.toString(), entity);
-            }
-
-        }
+        return 0;
     }
 
-    public void evaluate(String goldstandardName, String inputName, String resultsName){
+    public static void evaluate(String goldstandardName, String inputName, String resultsName){
 
         Integer correctSameAs = 0;
         Integer incorrectSameAs = 0;

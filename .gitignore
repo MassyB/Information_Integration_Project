@@ -4,3 +4,4 @@
 *.jar
 Test.java
 out/*
+*.tsv

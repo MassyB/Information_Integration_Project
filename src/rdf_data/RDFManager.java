@@ -8,7 +8,6 @@ import java.util.Set;
 
 public class RDFManager {
 
-
     public static Model getContextualGraph(Resource resource, int depth,
                                            Set<Property> propertiesToConsider, Model originalGraph) {
 

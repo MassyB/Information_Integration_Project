@@ -1,7 +1,8 @@
 package utils;
 
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
-import rdf_data.RDFManager;
+import org.apache.jena.rdf.model.ResourceFactory;
 import rdf_metadata.EntityMap;
 import rdf_metadata.EntityRdf;
 import rdf_metadata.RDFMetadata;
@@ -28,7 +29,7 @@ public class Utils {
         return sameAsMapping;
     }
 
-    public static void wirteMappingIntoTsv(Map<String, String> mapping, String filePath) throws IOException {
+    public static void writeMappingIntoTsv(Map<String, String> mapping, String filePath) throws IOException {
 
         FileWriter fw = new FileWriter(filePath);
         for(String URIentity1 : mapping.keySet()){
@@ -36,6 +37,9 @@ public class Utils {
             fw.write(URIentity1+"\t"+URIentity2+"\n");
         }
         fw.close();
+    }
+    public static String changeExtenstionToTsv(String filePath){
+        return filePath.replace(".rdf",".tsv");
     }
 
     public static Map<String, String> readTsvFile(String filepath) throws IOException {
@@ -58,12 +62,20 @@ public class Utils {
         return mappings;
     }
 
-    public static List<Property> getConsideredPropertiesFromFile(String filepath){
+    public static List<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
 
         List<Property> properties = new ArrayList<>();
+        String strLine;
 
-        //TODO magic here
+        FileInputStream fstream = new FileInputStream(filepath);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
+        while ((strLine = br.readLine()) != null){
+            Property p = ResourceFactory.createProperty(strLine);
+            //maybe add if p.isProperty() then add
+            properties.add(p);
+        }
+        br.close();
         return properties;
     }
 

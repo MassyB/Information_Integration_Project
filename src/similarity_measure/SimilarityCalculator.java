@@ -2,11 +2,17 @@ package similarity_measure;
 
 import com.wcohen.ss.SoftTFIDF;
 import org.apache.jena.graph.Graph;
+import org.apache.jena.ontology.impl.FunctionalPropertyImpl;
+import org.apache.jena.ontology.impl.OntPropertyImpl;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.impl.PropertyImpl;
+import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.thrift.Option;
+import rdf_data.RDFManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -104,4 +110,26 @@ public class SimilarityCalculator {
         }
         return score;
     }
+
+    public static void main(String[] args){
+
+        Model model = ModelFactory.createDefaultModel();
+        model.read(FileManager.get().open("data/restaurants/restaurant1.rdf"), "");
+
+        StmtIterator iter = model.listStatements();
+        while(iter.hasNext()) {
+            Statement st = iter.nextStatement();
+            Resource rs = st.getSubject();
+
+            Set<Property> functionalProperties = new HashSet<>();
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#name"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#has_address"));
+            Model e1 = RDFManager.getContextualGraph(rs,2, functionalProperties, model);
+        }
+
+
+
+    }
+
 }

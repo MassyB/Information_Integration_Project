@@ -16,6 +16,7 @@ public class Utils {
    public final static int recallIdx = 1;
    public final static int f1Idx = 2;
 
+
     public static Map<String, String> getSameAsLinks(String filePath){
 
         RDFMetadata rdfMetadata = new RDFMetadata();
@@ -39,6 +40,7 @@ public class Utils {
         }
         fw.close();
     }
+
     public static String changeExtenstionToTsv(String filePath){
         return filePath.replace(".rdf",".tsv");
     }

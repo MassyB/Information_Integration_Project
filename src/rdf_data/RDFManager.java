@@ -43,7 +43,7 @@ public class RDFManager {
 
         while (iterator.hasNext()) {
             Statement stmt = iterator.nextStatement();
-            Property p = stmt.getPredicate();
+            Property    p = stmt.getPredicate();
             // if the contextual graph considers this property go deeper
             if (propertiesToConsider.contains(p)) {
                 RDFNode object = stmt.getObject();

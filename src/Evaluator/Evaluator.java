@@ -10,8 +10,8 @@ public class Evaluator {
 
     public void Main(){
         String goldstandardFileName = "data/restaurants/restaurant1_restaurant2_goldstandard.rdf";
-        String inputFile = "data/restaurants/restaurant1_restaurant2_withFalseSameAsLinks.rdf";
-        String resultsFileName = "data/restaurants/restaurant1_restaurant2_Results.rdf";
+        String inputFile = "data/restaurants/restaurant1_restaurant2_withFalseSameAsLinks.tsv";
+        String resultsFileName = "data/restaurants/restaurant1_restaurant2_Results.tsv";
         evaluate(goldstandardFileName, inputFile, resultsFileName);
 
     }
@@ -24,6 +24,7 @@ public class Evaluator {
             Resource subject = stmt.getSubject();
             Property predicate = stmt.getPredicate();
             RDFNode object = stmt.getObject();
+
 
             if (object instanceof Resource) {
                     if(predicate.toString().contains("entity")) {

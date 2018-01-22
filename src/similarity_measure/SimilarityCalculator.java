@@ -24,6 +24,7 @@ public class SimilarityCalculator {
         this.e1 = e1;
         this.e2 = e2;
 
+
     }
 
 
@@ -36,7 +37,8 @@ public class SimilarityCalculator {
 
         double score = 0.0;
         Integer counter = 0;
-        Resource res1 = e1.listStatements().nextStatement().getSubject();
+        Statement res1 = e;
+        res1.getLiteral()
         Resource res2 = e2.getResource(res1.getURI());
         visited.add(res1.getId());
 
@@ -78,6 +80,7 @@ public class SimilarityCalculator {
         if (currentDepth == depth - 1) {
             while (iter.hasNext()){
                 Statement st = iter.nextStatement();
+                Resource res =
                 Resource otherResource = e2.getModel().getResource(st.getPredicate().getURI());
                 if (st.getResource().isLiteral() && otherResource.isLiteral()){
                     score += similarity(st.getLiteral(), otherResource.asLiteral());

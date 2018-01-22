@@ -10,11 +10,9 @@ import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.thrift.Option;
 import rdf_data.RDFManager;
+import utils.Utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class SimilarityCalculator {
@@ -111,21 +109,26 @@ public class SimilarityCalculator {
         return score;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
+        Map<String, String> goldMap = Utils.getSameAsLinks("data/restaurants/restaurant1_restaurant2_goldstandard.rdf");
+
+
 
         Model model = ModelFactory.createDefaultModel();
         model.read(FileManager.get().open("data/restaurants/restaurant1.rdf"), "");
 
-        StmtIterator iter = model.listStatements();
-        while(iter.hasNext()) {
-            Statement st = iter.nextStatement();
-            Resource rs = st.getSubject();
+        for(Map.Entry<String, String> entry : goldMap.entrySet()) {
+            String e2Ressource = entry.getKey();
+            String e1Ressource = entry.getValue();
 
+            Resource rs = model.getResource(e1Ressource);
             Set<Property> functionalProperties = new HashSet<>();
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#has_address"));
             Model e1 = RDFManager.getContextualGraph(rs,2, functionalProperties, model);
+            System.out.println("Shit");
         }
 
 

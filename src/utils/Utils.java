@@ -11,6 +11,10 @@ import java.util.*;
 
 public class Utils {
 
+   public final static int precisionIdx= 0;
+   public final static int recallIdx = 1;
+   public final static int f1Idx = 2;
+
     public static Map<String, String> getSameAsLinks(String filePath){
 
         RDFMetadata rdfMetadata = new RDFMetadata();
@@ -65,12 +69,11 @@ public class Utils {
     }
 
 
-    public static Map<String, String> getTestMapping(Map<String, String> goldStandart, float ratio){
+    public static Map<String, String> getTestMapping(Map<String, String> goldStandart, double ratio){
         Map<String, String> testMapping = new HashMap<>();
         List<String> entitiesFromKb2 = new ArrayList<>(goldStandart.values());
         Random random = new Random();
         int nbEntities = entitiesFromKb2.size();
-
         for(String entityURI1 : goldStandart.keySet()){
             String goodMapping = goldStandart.get(entityURI1);
             // flip a coin and see if the entry has to change
@@ -89,8 +92,40 @@ public class Utils {
         return testMapping;
     }
 
+    public static Map<String, String> getIntersection(Map<String, String> map1, Map<String, String> map2){
 
+        Map<String, String> intersection = new HashMap<>();
 
+        for(String k1: map1.keySet()){
+            String v1 = map1.get(k1);
+            if(map2.containsKey(k1) && map2.get(k1).equals(v1)){
+                intersection.put(k1,v1);
+            }
+        }
 
+        return intersection;
+    }
+
+    public static double[] getPrecisionRecall(Map<String, String> goldStandard,Map<String,String> validationOutput ){
+
+        int goldStandardSize = goldStandard.size();
+        int validationOutputSize = validationOutput.size();
+        int nbCommonEntries = 0;
+
+        for(String entity :validationOutput.keySet()){
+
+            if(goldStandard.containsKey(entity) &&
+                    goldStandard.get(entity).equals(validationOutput.get(entity))){
+                nbCommonEntries ++;
+            }
+        }
+
+        double[] results = new double[3];
+
+        results[precisionIdx] = nbCommonEntries / (1.0 * validationOutputSize);
+        results[recallIdx] = nbCommonEntries / (1.0 * goldStandardSize);
+        results[f1Idx] = 2 * (results[precisionIdx] * results[recallIdx]) / (results[precisionIdx] + results[recallIdx]);
+        return results;
+    }
 
 }

@@ -7,10 +7,7 @@ import rdf_metadata.EntityRdf;
 import rdf_metadata.RDFMetadata;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Utils {
 
@@ -66,6 +63,34 @@ public class Utils {
 
         return properties;
     }
+
+
+    public static Map<String, String> getTestMapping(Map<String, String> goldStandart, float ratio){
+        Map<String, String> testMapping = new HashMap<>();
+        List<String> entitiesFromKb2 = new ArrayList<>(goldStandart.values());
+        Random random = new Random();
+        int nbEntities = entitiesFromKb2.size();
+
+        for(String entityURI1 : goldStandart.keySet()){
+            String goodMapping = goldStandart.get(entityURI1);
+            // flip a coin and see if the entry has to change
+            if(random.nextFloat() < ratio){
+                // change the entry
+                String falseMapping;
+
+                while(! (falseMapping = entitiesFromKb2.get(random.nextInt(nbEntities))).equals(goodMapping)){
+                    testMapping.put(entityURI1, falseMapping);
+                }
+            }
+            else {
+                testMapping.put(entityURI1, goodMapping);
+            }
+        }
+        return testMapping;
+    }
+
+
+
 
 
 }

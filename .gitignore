@@ -2,3 +2,6 @@
 *.iml
 *.txt
 *.jar
+Test.java
+out/*
+*.tsv

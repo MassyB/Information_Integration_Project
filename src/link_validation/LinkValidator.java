@@ -33,7 +33,7 @@ public class LinkValidator {
 
         this.threshold = threshold;
         this.depth = depth;
-        this.agregationFunction  = Agregation.AVG;
+        this.agregationFunction  = Agregation.MAX;
         this.propertiesToConsider = properties;
     }
 

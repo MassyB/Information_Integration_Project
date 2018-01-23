@@ -212,7 +212,13 @@ public class SimilarityCalculator {
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));
 
             Model e1 = RDFManager.getContextualGraph(rs1,1, functionalProperties, model1);
-            Model e2 = RDFManager.getContextualGraph(rs2,1, functionalProperties, model2);
+            Model e2 = RDFManager.getContextualGraph(rs2,2, functionalProperties, model2);
+
+            Utils.printModel(e1);
+            System.out.println("________");
+            Utils.printModel(e2);
+
+
 
             SimilarityCalculator sc = new SimilarityCalculator(e1, e2, e1Ressource, e2Ressource);
             if(sc.isFalseSameAs()) {

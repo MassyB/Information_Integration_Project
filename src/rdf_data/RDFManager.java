@@ -13,7 +13,7 @@ import java.util.Set;
 public class RDFManager {
 
     public static Model getContextualGraph(Resource resource, int depth,
-                                           List<Property> propertiesToConsider, Model originalGraph) {
+                                           Set<Property> propertiesToConsider, Model originalGraph) {
 
 
         Set<Statement> statements = getContextualGraph(originalGraph, resource, new HashSet<RDFNode>(),
@@ -26,7 +26,7 @@ public class RDFManager {
     }
 
     public static Set<Statement> getContextualGraph(Model model, Resource resource, Set<RDFNode> visited,
-                                                    List<Property> propertiesToConsider, int reachedDepth, int depth,
+                                                    Set<Property> propertiesToConsider, int reachedDepth, int depth,
                                                     boolean[] removeLastEntityFalg, boolean[] supressStmtWithObject) {
 
         Set<Statement> contextualGraph = new HashSet<>();

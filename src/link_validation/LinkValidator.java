@@ -7,11 +7,9 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import rdf_data.RDFManager;
+import similarity_measure.SimilarityCalculator;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LinkValidator {
 
@@ -19,10 +17,10 @@ public class LinkValidator {
     private double threshold;
     private Agregation agregationFunction;
     int depth;
-    List<Property> propertiesToConsider;
+    Set<Property> propertiesToConsider;
 
     public LinkValidator(double threshold, int depth, Agregation agregationFunction,
-                         List<Property> properties){
+                         Set<Property> properties){
 
         this.threshold = threshold;
         this.depth = depth;
@@ -30,8 +28,12 @@ public class LinkValidator {
         this.propertiesToConsider = properties;
     }
 
+    public LinkValidator(){
+
+    }
+
     // a default constructor that uses the average for agregating
-    public LinkValidator(double threshold, int depth, List<Property> properties){
+    public LinkValidator(double threshold, int depth, Set<Property> properties){
 
         this.threshold = threshold;
         this.depth = depth;
@@ -70,27 +72,56 @@ public class LinkValidator {
         return validMappings;
     }
 
-
-
+    /**
+     * Check if a link is valid or not
+     * @param entity1
+     * @param entity2
+     * @return true if it is, false otherwise
+     */
     public boolean isValidLink(RDFNode entity1, RDFNode entity2){
-        //TODO implement
+        ArrayList<Double> similarities = SimilarityCalculator.cSimilarityRecursive(entity1, entity2);
+
+        // we did not find any match
+        if(similarities.isEmpty())
+            return false;
+
+        switch (this.agregationFunction) {
+            case AVG:
+                return average(similarities) > threshold;
+            case MAX:
+                return max(similarities) > threshold;
+            case MIN:
+                return min(similarities) > threshold;
+        }
+
         return false;
     }
 
-    private double average(Set<Double> similarities){
-        //TODO return the average of the set
-        return 0;
+    /**
+     * Returns average of a list
+     * @param similarities
+     * @return
+     */
+    public double average(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).average().getAsDouble();
     }
 
-    private double min(Set<Double> similarities){
-        //TODO return the min of the set
-        return 0;
+    /**
+     * Returns min of a list
+     * @param similarities
+     * @return
+     */
+    public double min(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).min().getAsDouble();
     }
 
-    private double max(Set<Double> similarities){
-        //TODO return the max of the set
-        return 0;
+    /**
+     * Returns max of a list
+     * @param similarities
+     * @return
+     */
+    public double max(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).max().getAsDouble();
     }
-
 
 }

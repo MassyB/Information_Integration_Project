@@ -160,7 +160,7 @@ public class SimilarityCalculator {
                     }
                 }
                 else {
-                    System.err.println("");
+                    System.err.println("DK exception");
                 }
 
             }
@@ -171,15 +171,15 @@ public class SimilarityCalculator {
 
     public static void main(String[] args) {
 
-        Map<String, String> goldMap = Utils.getSameAsLinks("data/person2/dataset21_dataset22_goldstandard_person.xml");
+        Map<String, String> goldMap = Utils.getSameAsLinks("data/restaurants/restaurant1_restaurant2_goldstandard.rdf");
 
 
 
         Model model1 = ModelFactory.createDefaultModel();
-        model1.read(FileManager.get().open("data/person2/person21.rdf"), "");
+        model1.read(FileManager.get().open("data/restaurants/restaurant1.rdf"), "");
 
         Model model2 = ModelFactory.createDefaultModel();
-        model2.read(FileManager.get().open("data/person2/person22.rdf"), "");
+        model2.read(FileManager.get().open("data/restaurants/restaurant2.rdf"), "");
 
         for(Map.Entry<String, String> entry : goldMap.entrySet()) {
             String e2Ressource = entry.getKey();
@@ -189,7 +189,7 @@ public class SimilarityCalculator {
             Resource rs2 = model2.getResource(e2Ressource);
             Set<Property> functionalProperties = new HashSet<>();
 
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#given_name"));
+            /*functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#given_name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#Address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#street"));
@@ -199,20 +199,20 @@ public class SimilarityCalculator {
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#Address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#street"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#date_of_birth"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#date_of_birth"));*/
 
 
-            /*functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#street"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#phone_number"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));*/
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));
 
-            Model e1 = RDFManager.getContextualGraph(rs1,2, functionalProperties, model1);
-            Model e2 = RDFManager.getContextualGraph(rs2,2, functionalProperties, model2);
+            Model e1 = RDFManager.getContextualGraph(rs1,1, functionalProperties, model1);
+            Model e2 = RDFManager.getContextualGraph(rs2,1, functionalProperties, model2);
 
             SimilarityCalculator sc = new SimilarityCalculator(e1, e2, e1Ressource, e2Ressource);
             if(sc.isFalseSameAs()) {

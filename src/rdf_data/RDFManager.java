@@ -7,12 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RDFManager {
 
     public static Model getContextualGraph(Resource resource, int depth,
-                                           Set<Property> propertiesToConsider, Model originalGraph) {
+                                           List<Property> propertiesToConsider, Model originalGraph) {
 
 
         Set<Statement> statements = getContextualGraph(originalGraph, resource, new HashSet<RDFNode>(),
@@ -25,13 +26,16 @@ public class RDFManager {
     }
 
     public static Set<Statement> getContextualGraph(Model model, Resource resource, Set<RDFNode> visited,
-                                                    Set<Property> propertiesToConsider, int reachedDepth, int depth,
+                                                    List<Property> propertiesToConsider, int reachedDepth, int depth,
                                                     boolean[] removeLastEntityFalg, boolean[] supressStmtWithObject) {
 
         Set<Statement> contextualGraph = new HashSet<>();
-        if (reachedDepth > depth) return contextualGraph;
+        if (reachedDepth >= depth){
+            supressStmtWithObject[0] = true ;
+            return contextualGraph;
+        }
         if (visited.contains(resource)) return contextualGraph;
-        reachedDepth++;
+
 
         removeLastEntityFalg[0] = false;
         supressStmtWithObject[0] = false;
@@ -59,7 +63,7 @@ public class RDFManager {
                     // do the recursion
                     contextualGraph.add(stmt);
                     Set<Statement> subContextualGraph = getContextualGraph(model, (Resource) object, visited,
-                            propertiesToConsider, reachedDepth,
+                            propertiesToConsider, reachedDepth+1,
                             depth, removeLastEntityFalg,
                             supressStmtWithObject);
                     if (removeLastEntityFalg[0]) {

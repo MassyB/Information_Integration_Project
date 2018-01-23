@@ -97,6 +97,14 @@ public final class SimilarityCalculator {
 
     public static void main(String[] args) {
 
+        System.out.println("Arguments");
+        System.out.println("----------------");
+        for(String arg : args) {
+            System.out.println(arg);
+        }
+        System.out.println("----------------");
+
+
         Map<String, String> goldMap = Utils.getSameAsLinks("data/person2/dataset21_dataset22_goldstandard_person.xml");
 
         Model model1 = ModelFactory.createDefaultModel();

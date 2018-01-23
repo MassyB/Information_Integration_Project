@@ -19,10 +19,10 @@ public class LinkValidator {
     private double threshold;
     private Agregation agregationFunction;
     int depth;
-    List<Property> propertiesToConsider;
+    Set<Property> propertiesToConsider;
 
     public LinkValidator(double threshold, int depth, Agregation agregationFunction,
-                         List<Property> properties){
+                         Set<Property> properties){
 
         this.threshold = threshold;
         this.depth = depth;
@@ -31,7 +31,7 @@ public class LinkValidator {
     }
 
     // a default constructor that uses the average for agregating
-    public LinkValidator(double threshold, int depth, List<Property> properties){
+    public LinkValidator(double threshold, int depth, Set<Property> properties){
 
         this.threshold = threshold;
         this.depth = depth;

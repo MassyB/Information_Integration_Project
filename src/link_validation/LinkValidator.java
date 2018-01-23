@@ -1,7 +1,5 @@
 package link_validation;
 
-import com.sun.javafx.scene.control.ReadOnlyUnbackedObservableList;
-import org.apache.jena.ext.com.google.common.primitives.Doubles;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;

@@ -8,6 +8,7 @@ import org.apache.jena.util.FileManager;
 import rdf_data.RDFManager;
 import utils.Utils;
 
+import java.io.IOException;
 import java.util.*;
 
 import static utils.Utils.printModel;
@@ -57,7 +58,6 @@ public final class SimilarityCalculator {
     private static ArrayList<Double> cSimilarityRecursive(RDFNode e1, RDFNode e2, Integer currentDepth, List<String> visited) {
         ArrayList<Double> score = new ArrayList<>();
         StmtIterator iter = ((ResourceImpl) e1).listProperties();
-        //StmtIterator iter2 = ((ResourceImpl) e2).listProperties();
 
         while (iter.hasNext()){
             Statement st = iter.nextStatement();
@@ -93,6 +93,36 @@ public final class SimilarityCalculator {
         }
 
         return score;
+    }
+
+    public static void magic(String goldStandardPath, String testFilePath, String rdf1Path, String rdf2Path,
+                             int depth, double treshold, String propertiesPath, String aggregationFunc, String outputFilePath) throws IOException {
+
+        Model model1 = ModelFactory.createDefaultModel();
+        model1.read(FileManager.get().open(rdf1Path), "");
+
+        Model model2 = ModelFactory.createDefaultModel();
+        model2.read(FileManager.get().open(rdf2Path), "");
+
+        Map<String, String> goldMap = Utils.getSameAsLinks(goldStandardPath);
+        Map<String, String> testMap = Utils.getSameAsLinks(testFilePath);
+
+        Set<Property> functionalProperties = new HashSet<>(Utils.getConsideredPropertiesFromFile(propertiesPath));
+
+
+        for(Map.Entry<String, String> entry : goldMap.entrySet()) {
+            String e2Ressource = entry.getKey();
+            String e1Ressource = entry.getValue();
+
+            Resource rs1 = model1.getResource(e1Ressource);
+            Resource rs2 = model2.getResource(e2Ressource);
+
+            Model e1 = RDFManager.getContextualGraph(rs1, depth, functionalProperties, model1);
+            Model e2 = RDFManager.getContextualGraph(rs2, depth, functionalProperties, model2);
+
+            System.out.println("score " + SimilarityCalculator.cSimilarityRecursive(e1.getResource(e1Ressource), e2.getResource(e2Ressource)));
+        }
+
     }
 
     public static void main(String[] args) {
@@ -154,8 +184,6 @@ public final class SimilarityCalculator {
 
             break;
         }
-
-
 
     }
 

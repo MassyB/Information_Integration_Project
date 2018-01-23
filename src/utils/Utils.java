@@ -1,5 +1,6 @@
 package utils;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -39,6 +40,10 @@ public class Utils {
             fw.write(URIentity1+"\t"+URIentity2+"\n");
         }
         fw.close();
+    }
+
+    public static void printModel(Model model){
+        model.write(System.out);
     }
 
     public static String changeExtenstionToTsv(String filePath){
@@ -141,5 +146,6 @@ public class Utils {
         results[f1Idx] = 2 * (results[precisionIdx] * results[recallIdx]) / (results[precisionIdx] + results[recallIdx]);
         return results;
     }
+
 
 }

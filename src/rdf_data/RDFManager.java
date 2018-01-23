@@ -2,6 +2,9 @@ package rdf_data;
 
 import org.apache.jena.rdf.model.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,9 +29,12 @@ public class RDFManager {
                                                     boolean[] removeLastEntityFalg, boolean[] supressStmtWithObject) {
 
         Set<Statement> contextualGraph = new HashSet<>();
-        if (reachedDepth > depth) return contextualGraph;
+        if (reachedDepth >= depth){
+            supressStmtWithObject[0] = true ;
+            return contextualGraph;
+        }
         if (visited.contains(resource)) return contextualGraph;
-        reachedDepth++;
+
 
         removeLastEntityFalg[0] = false;
         supressStmtWithObject[0] = false;
@@ -43,7 +49,7 @@ public class RDFManager {
 
         while (iterator.hasNext()) {
             Statement stmt = iterator.nextStatement();
-            Property p = stmt.getPredicate();
+            Property    p = stmt.getPredicate();
             // if the contextual graph considers this property go deeper
             if (propertiesToConsider.contains(p)) {
                 RDFNode object = stmt.getObject();
@@ -56,7 +62,7 @@ public class RDFManager {
                     // do the recursion
                     contextualGraph.add(stmt);
                     Set<Statement> subContextualGraph = getContextualGraph(model, (Resource) object, visited,
-                            propertiesToConsider, reachedDepth,
+                            propertiesToConsider, reachedDepth+1,
                             depth, removeLastEntityFalg,
                             supressStmtWithObject);
                     if (removeLastEntityFalg[0]) {
@@ -84,5 +90,17 @@ public class RDFManager {
         }
 
         return contextualGraph;
+    }
+
+    public static Model getRdfGraphFromFile(String filePath) throws FileNotFoundException {
+        Model model = ModelFactory.createDefaultModel();
+
+        String inputFileName = "data/person1/person11.rdf";
+        // use the FileManager to find the input file
+        InputStream in = new FileInputStream(filePath);
+        model.read(in,null);
+
+        return model;
+
     }
 }

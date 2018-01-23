@@ -27,7 +27,7 @@ public class MainValidateMappingTest {
      * prints the the measures : recall precision and F1 score
      */
 
-    // restaurant1_restaurant2_goldstandard.rdf data/restaurants/properties.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf
+    // data/restaurants/restaurant1_restaurant2_goldstandard.rdf data/restaurants/properties.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf
 
     private static final int _goldStandardRdfFile = 0;
     private static final int _propertiesToConsider = 1;

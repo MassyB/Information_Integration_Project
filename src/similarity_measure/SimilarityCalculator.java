@@ -13,7 +13,7 @@ import java.util.List;
  * SimilarityCalculator is a class that computes the similarity between 2
  * contextual graphs
  */
-public final class SimilarityCalculator {
+public class SimilarityCalculator {
 
     // private constructor to make the class static
     private SimilarityCalculator() {}

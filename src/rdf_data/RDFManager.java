@@ -29,9 +29,12 @@ public class RDFManager {
                                                     boolean[] removeLastEntityFalg, boolean[] supressStmtWithObject) {
 
         Set<Statement> contextualGraph = new HashSet<>();
-        if (reachedDepth > depth) return contextualGraph;
+        if (reachedDepth >= depth){
+            supressStmtWithObject[0] = true ;
+            return contextualGraph;
+        }
         if (visited.contains(resource)) return contextualGraph;
-        reachedDepth++;
+
 
         removeLastEntityFalg[0] = false;
         supressStmtWithObject[0] = false;
@@ -59,7 +62,7 @@ public class RDFManager {
                     // do the recursion
                     contextualGraph.add(stmt);
                     Set<Statement> subContextualGraph = getContextualGraph(model, (Resource) object, visited,
-                            propertiesToConsider, reachedDepth,
+                            propertiesToConsider, reachedDepth+1,
                             depth, removeLastEntityFalg,
                             supressStmtWithObject);
                     if (removeLastEntityFalg[0]) {

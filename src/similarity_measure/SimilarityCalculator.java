@@ -3,11 +3,14 @@ package similarity_measure;
 import com.wcohen.ss.SoftTFIDF;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.rdf.model.impl.PropertyImpl;
+import org.apache.jena.rdf.model.impl.ResourceImpl;
 import org.apache.jena.util.FileManager;
 import rdf_data.RDFManager;
 import utils.Utils;
 
 import java.util.*;
+
+import static utils.Utils.printModel;
 
 
 public class SimilarityCalculator {
@@ -15,16 +18,18 @@ public class SimilarityCalculator {
     Model e1, e2;
     String e1Ressource, e2Ressource;
     Double treshold = 0.3;
-    Integer depth = 2;
+    Integer depth = 1;
     List<String> visited = new ArrayList<>();
+    Set<Property> functionalProperties;
 
-    public SimilarityCalculator(Model e1, Model e2, String e1Ressource, String e2Ressource) {
+
+    public SimilarityCalculator(Model e1, Model e2, String e1Ressource, String e2Ressource, Set<Property> functionalProperties) {
 
         this.e1 = e1;
         this.e2 = e2;
         this.e1Ressource = e1Ressource;
         this.e2Ressource = e2Ressource;
-
+        this.functionalProperties = functionalProperties;
     }
 
 
@@ -75,8 +80,14 @@ public class SimilarityCalculator {
 
     public double cSimilarityRecursive (RDFNode e1, RDFNode e2, Integer currentDepth, ArrayList<Integer> counter) {
         double score = 0.0;
-        StmtIterator iter = e1.getModel().listStatements();
-        StmtIterator iter2 = e2.getModel().listStatements();
+        //Model newE1 = RDFManager.getContextualGraph(e1.asResource(), currentDepth, functionalProperties, e1.getModel());
+        StmtIterator iter = ((ResourceImpl) e1).listProperties();
+        //StmtIterator iter = e1.listStatements();
+        System.out.println("E1_new_level: \n");
+        printModel(e1.getModel());
+        System.out.println("E2_new_level: \n");
+        printModel(e2.getModel());
+        StmtIterator iter2 = ((ResourceImpl) e1).listProperties();
         if (currentDepth == depth - 1) {
             while (iter.hasNext()){
                 Statement st = iter.nextStatement();
@@ -160,7 +171,7 @@ public class SimilarityCalculator {
                     }
                 }
                 else {
-                    System.err.println("DK exception");
+                    System.err.println("");
                 }
 
             }
@@ -171,15 +182,15 @@ public class SimilarityCalculator {
 
     public static void main(String[] args) {
 
-        Map<String, String> goldMap = Utils.getSameAsLinks("data/restaurants/restaurant1_restaurant2_goldstandard.rdf");
+        Map<String, String> goldMap = Utils.getSameAsLinks("data/person2/dataset21_dataset22_goldstandard_person.xml");
 
 
 
         Model model1 = ModelFactory.createDefaultModel();
-        model1.read(FileManager.get().open("data/restaurants/restaurant1.rdf"), "");
+        model1.read(FileManager.get().open("data/person2/person21.rdf"), "");
 
         Model model2 = ModelFactory.createDefaultModel();
-        model2.read(FileManager.get().open("data/restaurants/restaurant2.rdf"), "");
+        model2.read(FileManager.get().open("data/person2/person22.rdf"), "");
 
         for(Map.Entry<String, String> entry : goldMap.entrySet()) {
             String e2Ressource = entry.getKey();
@@ -189,7 +200,7 @@ public class SimilarityCalculator {
             Resource rs2 = model2.getResource(e2Ressource);
             Set<Property> functionalProperties = new HashSet<>();
 
-            /*functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#given_name"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#given_name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#Address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#street"));
@@ -199,28 +210,26 @@ public class SimilarityCalculator {
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#Address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#street"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#date_of_birth"));*/
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#date_of_birth"));
 
 
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
+            /*functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#has_address"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#street"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#phone_number"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#name"));
             functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));
+            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));*/
 
             Model e1 = RDFManager.getContextualGraph(rs1,1, functionalProperties, model1);
             Model e2 = RDFManager.getContextualGraph(rs2,1, functionalProperties, model2);
+            System.out.println("E: \n");
+            printModel(e1);
+            System.out.println("E2: \n");
+            printModel(e2);
 
-            Utils.printModel(e1);
-            System.out.println("________");
-            Utils.printModel(e2);
-
-
-
-            SimilarityCalculator sc = new SimilarityCalculator(e1, e2, e1Ressource, e2Ressource);
+            SimilarityCalculator sc = new SimilarityCalculator(e1, e2, e1Ressource, e2Ressource, functionalProperties);
             if(sc.isFalseSameAs()) {
                 System.out.println("Not good");
             }

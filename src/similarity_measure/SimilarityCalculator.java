@@ -107,7 +107,7 @@ public final class SimilarityCalculator {
         Map<String, String> goldMap = Utils.getSameAsLinks(goldStandardPath);
         Map<String, String> testMap = Utils.getSameAsLinks(testFilePath);
 
-        Set<Property> functionalProperties = new HashSet<>(Utils.getConsideredPropertiesFromFile(propertiesPath));
+        Set<Property> functionalProperties = Utils.getConsideredPropertiesFromFile(propertiesPath);
 
 
         for(Map.Entry<String, String> entry : goldMap.entrySet()) {
@@ -117,8 +117,8 @@ public final class SimilarityCalculator {
             Resource rs1 = model1.getResource(e1Ressource);
             Resource rs2 = model2.getResource(e2Ressource);
 
-            Model e1 = RDFManager.getContextualGraph(rs1, depth, functionalProperties, model1);
-            Model e2 = RDFManager.getContextualGraph(rs2, depth, functionalProperties, model2);
+            Model e1 = RDFManager.getContextualGraph(rs1, depth, new LinkedList<>(functionalProperties), model1);
+            Model e2 = RDFManager.getContextualGraph(rs2, depth, new LinkedList<>(functionalProperties), model2);
 
             System.out.println("score " + SimilarityCalculator.cSimilarityRecursive(e1.getResource(e1Ressource), e2.getResource(e2Ressource)));
         }

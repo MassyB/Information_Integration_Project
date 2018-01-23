@@ -2,6 +2,9 @@ package rdf_data;
 
 import org.apache.jena.rdf.model.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +46,7 @@ public class RDFManager {
 
         while (iterator.hasNext()) {
             Statement stmt = iterator.nextStatement();
-            Property p = stmt.getPredicate();
+            Property    p = stmt.getPredicate();
             // if the contextual graph considers this property go deeper
             if (propertiesToConsider.contains(p)) {
                 RDFNode object = stmt.getObject();
@@ -86,4 +89,15 @@ public class RDFManager {
         return contextualGraph;
     }
 
+    public static Model getRdfGraphFromFile(String filePath) throws FileNotFoundException {
+        Model model = ModelFactory.createDefaultModel();
+
+        String inputFileName = "data/person1/person11.rdf";
+        // use the FileManager to find the input file
+        InputStream in = new FileInputStream(filePath);
+        model.read(in,null);
+
+        return model;
+
+    }
 }

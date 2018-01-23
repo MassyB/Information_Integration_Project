@@ -44,7 +44,7 @@ public class MainValidateMappingTest {
         // preparing the csv for results
         String cvsResultFile = args[_goldStandardRdfFile] + "_results.csv";
         FileWriter fw = new FileWriter(cvsResultFile);
-        fw.write("depth,threshold,agregation,precision,recall,f1score\n");
+        fw.write("\ndepth,threshold,agregation,precision,recall,f1score");
 
         int numberOfIetrations = 10;
         double proportionOfFalseMappings = 0.6;

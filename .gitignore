@@ -5,4 +5,8 @@
 Test.java
 out/*
 *.tsv
-*.class
+*.class*
+*.log
+C:\\logigng.log
+C:\\logigng.log.1
+

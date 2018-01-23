@@ -98,9 +98,8 @@ public class MainValidateMappingTest {
                 double f1score = validator.average(f1scores);
 
                 // print this in the csv file
-                fw.write(depth+","+threshold+","+agregation.name()+
+                fw.write("\n"+depth+","+threshold+","+agregation.name()+
                         ","+precision+","+recall+","+f1score);
-
 
                 //empty all the structures
                 precisions.clear();

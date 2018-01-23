@@ -94,14 +94,12 @@ public class RDFManager {
     }
 
     public static Model getRdfGraphFromFile(String filePath) throws FileNotFoundException {
-        Model model = ModelFactory.createDefaultModel();
 
-        String inputFileName = "data/person1/person11.rdf";
+        Model model = ModelFactory.createDefaultModel();
         // use the FileManager to find the input file
         InputStream in = new FileInputStream(filePath);
         model.read(in,null);
 
         return model;
-
     }
 }

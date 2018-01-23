@@ -125,7 +125,7 @@ public class Utils {
         return intersection;
     }
 
-    public static double[] getPrecisionRecall(Map<String, String> goldStandard,Map<String,String> validationOutput ){
+    public static double[] getPrecisionRecallF1(Map<String, String> goldStandard, Map<String,String> validationOutput ){
 
         int goldStandardSize = goldStandard.size();
         int validationOutputSize = validationOutput.size();

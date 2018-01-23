@@ -70,9 +70,9 @@ public class Utils {
         return mappings;
     }
 
-    public static List<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
+    public static Set<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
 
-        List<Property> properties = new ArrayList<>();
+        Set<Property> properties = new HashSet<>();
         String strLine;
 
         FileInputStream fstream = new FileInputStream(filepath);

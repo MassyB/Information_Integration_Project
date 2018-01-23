@@ -9,7 +9,10 @@ import org.apache.jena.rdf.model.Resource;
 import rdf_data.RDFManager;
 import similarity_measure.SimilarityCalculator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class LinkValidator {
 
@@ -28,12 +31,16 @@ public class LinkValidator {
         this.propertiesToConsider = properties;
     }
 
+    public LinkValidator(){
+
+    }
+
     // a default constructor that uses the average for agregating
     public LinkValidator(double threshold, int depth, Set<Property> properties){
 
         this.threshold = threshold;
         this.depth = depth;
-        this.agregationFunction  = Agregation.MAX;
+        this.agregationFunction  = Agregation.AVG;
         this.propertiesToConsider = properties;
     }
 

@@ -27,6 +27,12 @@ public class MainValidateMapping {
      *
      * @return write a tsv named  "MappingFile"_validated
      *         prints the the measures : recall precision and F1 score
+     *
+     *
+     *
+     *
+     * Example of inputs:
+     * data/restaurants/test0.5.tsv data/restaurants/gold_mapping.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf data/properties.tsv 3 0.4
      */
 
     private static final int _MappingFile = 0;
@@ -36,6 +42,8 @@ public class MainValidateMapping {
     private static final int _propertiesToConsiderFile = 4;
     private static final int _depth = 5;
     private static final int _threshold = 6;
+
+    // data/restaurants/test0.5.tsv data/restaurants/restaurant1_restaurant2_goldstandard.rdf data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf data/properties.txt 3 0.4
 
     public static void main(String[] args) throws IOException {
 
@@ -60,6 +68,7 @@ public class MainValidateMapping {
         // write the results
         Utils.writeMappingIntoTsv(validatedMappings, args[_MappingFile]+"_validated.tsv");
 
+        groundTruthMapping = Utils.getIntersection(groundTruthMapping, mappingToValidate);
         // compute the metrics : precision, recall, and F1 score
         double[] metrics = Utils.getPrecisionRecallF1(groundTruthMapping, validatedMappings);
 

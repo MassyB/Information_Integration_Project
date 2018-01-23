@@ -26,7 +26,7 @@ public class Utils {
         EntityMap entityMap = rdfMetadata.getEntityMap(filePath);
         for(EntityRdf entityRdf: entityMap.map.values()){
             ArrayList<String> mapping = entityRdf.resources;
-            sameAsMapping.put(mapping.get(0), mapping.get(1));
+            sameAsMapping.put(mapping.get(1), mapping.get(0));
         }
 
         return sameAsMapping;

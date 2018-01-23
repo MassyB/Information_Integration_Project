@@ -7,11 +7,9 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import rdf_data.RDFManager;
+import similarity_measure.SimilarityCalculator;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LinkValidator {
 
@@ -73,23 +71,33 @@ public class LinkValidator {
 
 
     public boolean isValidLink(RDFNode entity1, RDFNode entity2){
-        //TODO implement
+        ArrayList<Double> similarities = SimilarityCalculator.cSimilarityRecursive(entity1, entity2);
+
+        if(similarities.isEmpty())
+            return false;
+
+        switch (this.agregationFunction) {
+            case AVG:
+                return average(similarities) > threshold;
+            case MAX:
+                return max(similarities) > threshold;
+            case MIN:
+                return min(similarities) > threshold;
+        }
+
         return false;
     }
 
-    private double average(Set<Double> similarities){
-        //TODO return the average of the set
-        return 0;
+    private double average(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).average().getAsDouble();
     }
 
-    private double min(Set<Double> similarities){
-        //TODO return the min of the set
-        return 0;
+    private double min(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).min().getAsDouble();
     }
 
-    private double max(Set<Double> similarities){
-        //TODO return the max of the set
-        return 0;
+    private double max(List<Double> similarities){
+        return similarities.stream().mapToDouble(value -> value).max().getAsDouble();
     }
 
 

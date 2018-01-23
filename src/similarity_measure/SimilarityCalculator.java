@@ -71,7 +71,7 @@ public final class SimilarityCalculator {
                 }
             }
 
-            if (st2 == null) { return null; }
+            if (st2 == null) { return new ArrayList<Double>(); }
 
             RDFNode resource1 = st.getObject();
             RDFNode resource2 = st2.getObject();
@@ -87,9 +87,7 @@ public final class SimilarityCalculator {
                     visited.add(resource1.asResource().getURI());
                 }
             }
-            else {
-                System.err.println("SimilarityCalculator.cSimilarityRecursive : isLiteral & isResource error");
-            }
+
 
         }
 

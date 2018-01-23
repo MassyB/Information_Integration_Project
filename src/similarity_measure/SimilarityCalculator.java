@@ -1,6 +1,7 @@
 package similarity_measure;
 
 import com.wcohen.ss.SoftTFIDF;
+import link_validation.LinkValidator;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.rdf.model.impl.PropertyImpl;
 import org.apache.jena.rdf.model.impl.ResourceImpl;
@@ -95,8 +96,8 @@ public final class SimilarityCalculator {
         return score;
     }
 
-    public static void magic(String goldStandardPath, String testFilePath, String rdf1Path, String rdf2Path,
-                             int depth, double treshold, String propertiesPath, String aggregationFunc, String outputFilePath) throws IOException {
+    /*public static void magic(String goldStandardPath, String testFilePath, String rdf1Path, String rdf2Path,
+                             int depth, double treshold, String propertiesPath, LinkValidator.Agregation aggregationFunc, String outputFilePath) throws IOException {
 
         Model model1 = ModelFactory.createDefaultModel();
         model1.read(FileManager.get().open(rdf1Path), "");
@@ -110,7 +111,7 @@ public final class SimilarityCalculator {
         Set<Property> functionalProperties = Utils.getConsideredPropertiesFromFile(propertiesPath);
 
 
-        for(Map.Entry<String, String> entry : goldMap.entrySet()) {
+        for(Map.Entry<String, String> entry : testMap.entrySet()) {
             String e2Ressource = entry.getKey();
             String e1Ressource = entry.getValue();
 
@@ -123,9 +124,9 @@ public final class SimilarityCalculator {
             System.out.println("score " + SimilarityCalculator.cSimilarityRecursive(e1.getResource(e1Ressource), e2.getResource(e2Ressource)));
         }
 
-    }
+    }*/
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         System.out.println("Arguments");
         System.out.println("----------------");
@@ -134,57 +135,38 @@ public final class SimilarityCalculator {
         }
         System.out.println("----------------");
 
+        String goldStandardPath, testFilePath, rdf1Path, rdf2Path, propertiesPath, aggregationFunc, outputFilePath;
 
-        Map<String, String> goldMap = Utils.getSameAsLinks("data/person2/dataset21_dataset22_goldstandard_person.xml");
+        goldStandardPath = "data/person2/dataset21_dataset22_goldstandard_person.xml";
+        testFilePath = "data/restaurants/restaurant1_restaurant2_withFalseSameAsLinks.rdf";
+        rdf1Path = "data/person2/person21.rdf";
+        rdf2Path = "data/person2/person22.rdf";
+        outputFilePath = "data/output.tsv";
+        aggregationFunc = "AVG";
 
-        Model model1 = ModelFactory.createDefaultModel();
-        model1.read(FileManager.get().open("data/person2/person21.rdf"), "");
+        LinkValidator.Agregation agregation = LinkValidator.Agregation.AVG;
 
-        Model model2 = ModelFactory.createDefaultModel();
-        model2.read(FileManager.get().open("data/person2/person22.rdf"), "");
-
-        for(Map.Entry<String, String> entry : goldMap.entrySet()) {
-            String e2Ressource = entry.getKey();
-            String e1Ressource = entry.getValue();
-
-            Resource rs1 = model1.getResource(e1Ressource);
-            Resource rs2 = model2.getResource(e2Ressource);
-            Set<Property> functionalProperties = new HashSet<>();
-
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#given_name"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#Address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#street"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person1.owl#date_of_birth"));
-
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#given_name"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#Address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#street"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_person2.owl#date_of_birth"));
-
-
-            /*functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#phone_number"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#name"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant1.owl#street"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#phone_number"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#name"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#has_address"));
-            functionalProperties.add(new PropertyImpl("http://www.okkam.org/ontology_restaurant2.owl#street"));*/
-
-            Model e1 = RDFManager.getContextualGraph(rs1,1, functionalProperties, model1);
-            Model e2 = RDFManager.getContextualGraph(rs2,1, functionalProperties, model2);
-            System.out.println("E: \n");
-            printModel(e1);
-            System.out.println("E2: \n");
-            printModel(e2);
-
-            System.out.println("score " + SimilarityCalculator.cSimilarityRecursive(e1.getResource(e1Ressource), e2.getResource(e2Ressource)));
-
-            break;
+        switch (aggregationFunc.toLowerCase()) {
+            case "avg":
+                agregation = LinkValidator.Agregation.AVG;
+                break;
+            case "max":
+                agregation = LinkValidator.Agregation.MAX;
+                break;
+            case "min":
+                agregation = LinkValidator.Agregation.MIN;
+                break;
         }
 
-    }
+        int depth = 2;
+        double treshold = 0.2;
+
+        //magic(goldStandardPath);
+
+        //
+        //
+        // "data/person2/person22.rdf"
+
+    }*/
 
 }

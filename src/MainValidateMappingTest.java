@@ -40,13 +40,19 @@ public class MainValidateMappingTest {
         double[] thresholdValues = new double[]{0.1, 0.2, 0.3, 0.4,
                 0.5, 0.6, 0.7, 0.8, 0.9};
 
+        // agregation functions
+        LinkValidator.Agregation[] agrFunctions = new LinkValidator.Agregation[]{
+                LinkValidator.Agregation.AVG,
+                LinkValidator.Agregation.MAX,
+                LinkValidator.Agregation.MIN
+        };
+
         // use the average
-        LinkValidator.Agregation agregation = LinkValidator.Agregation.AVG;
 
         // preparing the csv for results
         String cvsResultFile = args[_goldStandardRdfFile] + "_results.csv";
         FileWriter fw = new FileWriter(cvsResultFile);
-        fw.write("depth,threshold,agregation,precision,recall,f1score");
+        fw.write("depth,threshold,agregation,precision,recall,f1score,time(ms)");
 
         int numberOfIetrations = 10;
         double proportionOfFalseMappings = 0.6;
@@ -54,6 +60,7 @@ public class MainValidateMappingTest {
         List<Double> precisions = new ArrayList<>();
         List<Double> recalls = new ArrayList<>();
         List<Double> f1scores = new ArrayList<>();
+        List<Double> executionTimes = new ArrayList<>();
 
         double[] metrics = new double[3];
 
@@ -69,45 +76,53 @@ public class MainValidateMappingTest {
         Map<String, String> groundTruthTest;
         Map<String, String> validatedMappings;
         LinkValidator validator = new LinkValidator();
+        long statTime ;
+        long endTime;
 
+        for (LinkValidator.Agregation agr : agrFunctions) {
 
-        for (int depth : depthValues) {
-            for (double threshold : thresholdValues) {
+            for (int depth : depthValues) {
+                for (double threshold : thresholdValues) {
 
-                for (int i = 0; i < numberOfIetrations; i++) {
+                    for (int i = 0; i < numberOfIetrations; i++) {
 
-                    mappingToValidate = Utils.getTestMapping(goldStandard, proportionOfFalseMappings);
-                    groundTruthTest = Utils.getIntersection(mappingToValidate, goldStandard);
-                    validator = new LinkValidator(threshold,depth,properties);
+                        mappingToValidate = Utils.getTestMapping(goldStandard, proportionOfFalseMappings);
+                        groundTruthTest = Utils.getIntersection(mappingToValidate, goldStandard);
+                        validator = new LinkValidator(threshold, depth, agr, properties);
 
-                    // validated links
-                    validatedMappings = validator.validateLinks(mappingToValidate,rdf1,rdf2);
+                        // compute the execution time
+                        statTime = System.currentTimeMillis();
+                        // validated links
+                        validatedMappings = validator.validateLinks(mappingToValidate, rdf1, rdf2);
+                        endTime = System.currentTimeMillis();
 
-                    // compute metrics
-                    metrics = Utils.getPrecisionRecallF1(groundTruthTest, validatedMappings);
+                        // compute metrics
+                        metrics = Utils.getPrecisionRecallF1(groundTruthTest, validatedMappings);
 
-                    // save the metrics
-                    precisions.add(metrics[Utils.precisionIdx]);
-                    recalls.add(metrics[Utils.recallIdx]);
-                    f1scores.add(metrics[Utils.f1Idx]);
+                        // save the metrics
+                        precisions.add(metrics[Utils.precisionIdx]);
+                        recalls.add(metrics[Utils.recallIdx]);
+                        f1scores.add(metrics[Utils.f1Idx]);
+                        executionTimes.add((double) endTime-statTime);
+                    }
+
+                    // compute the average for all the previous iterations
+                    double precision = validator.average(precisions);
+                    double recall = validator.average(recalls);
+                    double f1score = validator.average(f1scores);
+                    double executionTime = validator.average(executionTimes);
+
+                    // print this in the csv file
+                    fw.write("\n" + depth + "," + threshold + "," + agr.name() +
+                            "," + recall + "," + precision + "," + f1score+","+executionTime);
+
+                    //empty all the structures
+                    precisions.clear();
+                    recalls.clear();
+                    f1scores.clear();
                 }
-
-                // compute the average for all the previous iterations
-                double precision = validator.average(precisions);
-                double recall = validator.average(recalls);
-                double f1score = validator.average(f1scores);
-
-                // print this in the csv file
-                fw.write("\n"+depth+","+threshold+","+agregation.name()+
-                        ","+recall+","+precision+","+f1score);
-
-                //empty all the structures
-                precisions.clear();
-                recalls.clear();
-                f1scores.clear();
             }
         }
         fw.close();
     }
-
 }

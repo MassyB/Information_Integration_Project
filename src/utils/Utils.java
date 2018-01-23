@@ -70,9 +70,9 @@ public class Utils {
         return mappings;
     }
 
-    public static List<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
+    public static Set<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
 
-        List<Property> properties = new ArrayList<>();
+        Set<Property> properties = new HashSet<>();
         String strLine;
 
         FileInputStream fstream = new FileInputStream(filepath);
@@ -125,7 +125,7 @@ public class Utils {
         return intersection;
     }
 
-    public static double[] getPrecisionRecall(Map<String, String> goldStandard,Map<String,String> validationOutput ){
+    public static double[] getPrecisionRecallF1(Map<String, String> goldStandard, Map<String,String> validationOutput ){
 
         int goldStandardSize = goldStandard.size();
         int validationOutputSize = validationOutput.size();

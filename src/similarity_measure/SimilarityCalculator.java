@@ -82,16 +82,18 @@ public class SimilarityCalculator {
         double score = 0.0;
         //Model newE1 = RDFManager.getContextualGraph(e1.asResource(), currentDepth, functionalProperties, e1.getModel());
         StmtIterator iter = ((ResourceImpl) e1).listProperties();
+        //iter = e1.getModel().listStatements();
         //StmtIterator iter = e1.listStatements();
         System.out.println("E1_new_level: \n");
         printModel(e1.getModel());
         System.out.println("E2_new_level: \n");
         printModel(e2.getModel());
-        StmtIterator iter2 = ((ResourceImpl) e1).listProperties();
+        //StmtIterator iter2 = ((ResourceImpl) e2).listProperties();
         if (currentDepth == depth - 1) {
             while (iter.hasNext()){
                 Statement st = iter.nextStatement();
-                iter2 = e2.getModel().listStatements();
+                //iter2 = e2.getModel().listStatements();
+                StmtIterator iter2 = ((ResourceImpl) e2).listProperties();
                 Statement st2 = null;
                 while (iter2.hasNext()){
                     st2 = iter2.nextStatement();
@@ -128,7 +130,8 @@ public class SimilarityCalculator {
         else {
             while (iter.hasNext()){
                 Statement st = iter.nextStatement();
-                iter2 = e2.getModel().listStatements();
+                //iter2 = e2.getModel().listStatements();
+                StmtIterator iter2 = ((ResourceImpl) e2).listProperties();
                 Statement st2 = null;
                 while (iter2.hasNext()){
                     st2 = iter2.nextStatement();
@@ -181,6 +184,9 @@ public class SimilarityCalculator {
     }
 
     public static void main(String[] args) {
+
+        ArrayList<Double> newList = new ArrayList<>();
+        newList.add(null);
 
         Map<String, String> goldMap = Utils.getSameAsLinks("data/person2/dataset21_dataset22_goldstandard_person.xml");
 

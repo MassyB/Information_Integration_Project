@@ -30,6 +30,10 @@ public class LinkValidator {
         this.propertiesToConsider = properties;
     }
 
+    public LinkValidator(){
+
+    }
+
     // a default constructor that uses the average for agregating
     public LinkValidator(double threshold, int depth, Set<Property> properties){
 
@@ -77,7 +81,7 @@ public class LinkValidator {
         return false;
     }
 
-    private double average(Set<Double> similarities){
+    public double average(List<Double> similarities){
         //TODO return the average of the set
         return 0;
     }

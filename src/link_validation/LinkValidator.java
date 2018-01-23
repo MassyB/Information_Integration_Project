@@ -9,10 +9,7 @@ import org.apache.jena.rdf.model.Resource;
 import rdf_data.RDFManager;
 import similarity_measure.SimilarityCalculator;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LinkValidator {
 
@@ -105,7 +102,7 @@ public class LinkValidator {
      * @param similarities
      * @return
      */
-    private double average(List<Double> similarities){
+    public double average(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).average().getAsDouble();
     }
 
@@ -114,7 +111,7 @@ public class LinkValidator {
      * @param similarities
      * @return
      */
-    private double min(List<Double> similarities){
+    public double min(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).min().getAsDouble();
     }
 
@@ -123,7 +120,7 @@ public class LinkValidator {
      * @param similarities
      * @return
      */
-    private double max(List<Double> similarities){
+    public double max(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).max().getAsDouble();
     }
 

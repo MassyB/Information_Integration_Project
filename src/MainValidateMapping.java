@@ -32,7 +32,7 @@ public class MainValidateMapping {
      *
      *
      * Example of inputs:
-     * data/restaurants/test0.5.tsv data/restaurants/gold_mapping.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf data/properties.tsv 3 0.4
+     * data/restaurants/test0.5.tsv data/restaurants/gold_mapping.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf data/restaurants/properties.tsv 3 0.4
      */
 
     private static final int _MappingFile = 0;

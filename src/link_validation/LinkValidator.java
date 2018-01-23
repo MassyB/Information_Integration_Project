@@ -68,11 +68,16 @@ public class LinkValidator {
         return validMappings;
     }
 
-
-
+    /**
+     * Check if a link is valid or not
+     * @param entity1
+     * @param entity2
+     * @return true if it is, false otherwise
+     */
     public boolean isValidLink(RDFNode entity1, RDFNode entity2){
         ArrayList<Double> similarities = SimilarityCalculator.cSimilarityRecursive(entity1, entity2);
 
+        // we did not find any match
         if(similarities.isEmpty())
             return false;
 
@@ -88,17 +93,31 @@ public class LinkValidator {
         return false;
     }
 
+    /**
+     * Returns average of a list
+     * @param similarities
+     * @return
+     */
     private double average(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).average().getAsDouble();
     }
 
+    /**
+     * Returns min of a list
+     * @param similarities
+     * @return
+     */
     private double min(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).min().getAsDouble();
     }
 
+    /**
+     * Returns max of a list
+     * @param similarities
+     * @return
+     */
     private double max(List<Double> similarities){
         return similarities.stream().mapToDouble(value -> value).max().getAsDouble();
     }
-
 
 }

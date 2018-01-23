@@ -99,7 +99,7 @@ public class MainValidateMappingTest {
 
                 // print this in the csv file
                 fw.write("\n"+depth+","+threshold+","+agregation.name()+
-                        ","+precision+","+recall+","+f1score);
+                        ","+recall+","+precision+","+f1score);
 
                 //empty all the structures
                 precisions.clear();

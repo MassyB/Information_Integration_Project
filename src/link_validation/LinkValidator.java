@@ -17,6 +17,9 @@ public class LinkValidator {
     int depth;
     Set<Property> propertiesToConsider;
 
+    /**
+     *  constructor
+     * */
     public LinkValidator(double threshold, int depth, Agregation agregationFunction,
                          Set<Property> properties){
 
@@ -26,11 +29,16 @@ public class LinkValidator {
         this.propertiesToConsider = properties;
     }
 
+    /**
+     *  empty constructor
+     */
     public LinkValidator(){
 
     }
 
-    // a default constructor that uses the average for agregating
+    /**
+     *  constructor that hase AVG as default aggregation function
+     */
     public LinkValidator(double threshold, int depth, Set<Property> properties){
 
         this.threshold = threshold;
@@ -39,6 +47,14 @@ public class LinkValidator {
         this.propertiesToConsider = properties;
     }
 
+    /**
+     *  @param mappingToValidate contain the links to be validated
+     *  @param  rdf1 Model object containing the RDF dataset 1
+     *  @param  rdf2 Model object containing the RDF dataset 2
+     *
+     *  @return mapping containing the valid links of mappingToValidate
+     *
+     * */
     public Map<String, String> validateLinks(Map<String, String> mappingToValidate,
                                              Model rdf1, Model rdf2){
 
@@ -71,10 +87,13 @@ public class LinkValidator {
     }
 
     /**
-     * Check if a link is valid or not
+     *
      * @param entity1
      * @param entity2
+     *
      * @return true if it is, false otherwise
+     *
+     * Check if a link is valid or not
      */
     public boolean isValidLink(RDFNode entity1, RDFNode entity2){
         ArrayList<Double> similarities = SimilarityCalculator.cSimilarityRecursive(entity1, entity2);

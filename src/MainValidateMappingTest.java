@@ -52,7 +52,7 @@ public class MainValidateMappingTest {
         // preparing the csv for results
         String cvsResultFile = args[_goldStandardRdfFile] + "_results.csv";
         FileWriter fw = new FileWriter(cvsResultFile);
-        fw.write("depth,threshold,agregation,precision,recall,f1score,time(ms)");
+        fw.write("depth,threshold,agregation,recall,precision,f1score,time(ms)");
 
         int numberOfIetrations = 10;
         double proportionOfFalseMappings = 0.6;
@@ -120,6 +120,7 @@ public class MainValidateMappingTest {
                     precisions.clear();
                     recalls.clear();
                     f1scores.clear();
+                    executionTimes.clear();
                 }
             }
         }

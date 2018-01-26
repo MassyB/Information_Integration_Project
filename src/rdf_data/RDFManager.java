@@ -42,7 +42,7 @@ public class RDFManager {
     /**
      *  @param model the graph containing the contextual graph
      *  @param resource the rdf resource used to compute the Contextual graph
-     *  @param visited
+     *  @param visited the set of nodes containing visited ones
      *  @param propertiesToConsider set containing URI of properties to explore during construction
      *                              of contextual graph
      *  @param reachedDepth the current depth

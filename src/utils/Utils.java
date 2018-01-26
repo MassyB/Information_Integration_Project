@@ -16,7 +16,15 @@ public class Utils {
    public final static int recallIdx = 1;
    public final static int f1Idx = 2;
 
-
+    /***
+     *  @param filePath file containing the .xml Or .rdf file representing the sameAs links
+     *
+     *   @return mapping of same links
+     *
+     *   reads the file using Jena library and returns SameAs links as a map of string to string
+     *   which is much convenient to handle than a regular Jena Model object
+     *
+     */
     public static Map<String, String> getSameAsLinks(String filePath){
 
         RDFMetadata rdfMetadata = new RDFMetadata();
@@ -31,6 +39,13 @@ public class Utils {
         return sameAsMapping;
     }
 
+    /**
+     *  @param mapping sameAs links represented as a map of string to string
+     *  @param filePath the file path of the TSV to put the mappings in
+     *
+     *  write the mapping into a TSV file (for test purposes for example)
+     *
+     * */
     public static void writeMappingIntoTsv(Map<String, String> mapping, String filePath) throws IOException {
 
         FileWriter fw = new FileWriter(filePath);
@@ -41,14 +56,29 @@ public class Utils {
         fw.close();
     }
 
+    /**
+     *  for debugging purposes, just print the graph on the screen
+     * */
     public static void printModel(Model model){
         model.write(System.out);
     }
 
+    /**
+     * @param filePath change the extension fo the file
+     *
+     */
     public static String changeExtenstionToTsv(String filePath){
         return filePath.replace(".rdf",".tsv");
     }
-
+    /**
+     *  @param filepath file containing SameAs mappings
+     *
+     *  @return mapping (string to string) modeling sameAs links
+     *
+     *  this method read a tsv file containing the sameAs links and convert it to a map
+     *  which is easier to handle.
+     *
+     * */
     public static Map<String, String> readTsvFile(String filepath) throws IOException {
         Map<String, String> mappings= new HashMap<>();
         // Open the file
@@ -69,6 +99,11 @@ public class Utils {
         return mappings;
     }
 
+    /**
+     *  @param filepath file provieded by the domain expert. It contains properties to consider
+     *                  to compute the contextual graph hence the similarity.
+     *  @return a set of Jena Property objects
+     * */
     public static Set<Property> getConsideredPropertiesFromFile(String filepath) throws IOException {
 
         Set<Property> properties = new HashSet<>();
@@ -86,7 +121,15 @@ public class Utils {
         return properties;
     }
 
-
+    /**
+     * @param goldStandart mapping containing the valid sameAs links
+     * @param ratio number between 0 and 1 to control how much of the data is going to be
+     *              modified.
+     *
+     * this method is meant to produce test data, by faking some entries of the goldStandard
+     * ratio parameter is used to control how much of the data is going to be faked. if ratio is
+     * 0.6 this means that 60% of the links are going to be not valid links
+     * */
     public static Map<String, String> getTestMapping(Map<String, String> goldStandart, double ratio){
         Map<String, String> testMapping = new HashMap<>();
         List<String> entitiesFromKb2 = new ArrayList<>(goldStandart.values());
@@ -110,6 +153,15 @@ public class Utils {
         return testMapping;
     }
 
+    /**
+     *  @param map1
+     *  @param map2
+     *
+     *  @return intersection of map1 and map2
+     *
+     *  method computing the intersection of two mapps. returning only common entries of both
+     * */
+
     public static Map<String, String> getIntersection(Map<String, String> map1, Map<String, String> map2){
 
         Map<String, String> intersection = new HashMap<>();
@@ -123,6 +175,16 @@ public class Utils {
 
         return intersection;
     }
+
+    /**
+     *  @param goldStandard ground truth
+     *  @param validationOutput result of the validation
+     *
+     *  @return an array of doubles containing precision, recall and F1 score
+     *
+     *  computes metrics : precision, recall and F1 score
+     *
+     * */
 
     public static double[] getPrecisionRecallF1(Map<String, String> goldStandard, Map<String,String> validationOutput ){
 
@@ -145,6 +207,5 @@ public class Utils {
         results[f1Idx] = 2 * (results[precisionIdx] * results[recallIdx]) / (results[precisionIdx] + results[recallIdx]);
         return results;
     }
-
 
 }

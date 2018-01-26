@@ -28,9 +28,6 @@ public class MainValidateMapping {
      * @return write a tsv named  "MappingFile"_validated
      *         prints the the measures : recall precision and F1 score
      *
-     *
-     *
-     *
      * Example of inputs:
      * data/restaurants/test0.5.tsv data/restaurants/gold_mapping.tsv data/restaurants/restaurant1.rdf data/restaurants/restaurant2.rdf data/restaurants/properties.tsv 3 0.4
      */

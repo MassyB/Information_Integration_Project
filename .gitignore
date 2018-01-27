@@ -2,11 +2,9 @@
 *.iml
 *.txt
 *.jar
-Test.java
 out/*
 *.tsv
 *.class*
 *.log
-C:\\logigng.log
-C:\\logigng.log.1
-
+C:\\*
+data/*

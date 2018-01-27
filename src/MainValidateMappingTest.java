@@ -21,7 +21,6 @@ public class MainValidateMappingTest {
      * #param propertiesToConsider
      * #param rdf1File
      * #param rdf2File
-     * #param resultCSVFile a csv file where metrics will be put
      *
      * @return write a tsv named  "MappingFile"_validated
      * prints the the measures : recall precision and F1 score
